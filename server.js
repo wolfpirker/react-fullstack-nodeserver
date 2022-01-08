@@ -1,11 +1,15 @@
 const express = require('express');
 const app = express();
+const fs = require('fs');
 
+let HTML = fs.readFileSync(`${__dirname}/index.html`);
+
+
+app.use('/css', express.static(__dirname + '/public/css'));
 
 app.get('/', (req, res) => {
-    res.send('<html><body><h1 style="background:red">Hello there</h1></body></html>')
+    res.end(HTML)
 })
-
 
 app.get('/api/:username/:id', (req, res) => {
     let id = req.params.id;
