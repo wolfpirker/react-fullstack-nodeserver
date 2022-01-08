@@ -1,33 +1,17 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
+const app = express();
 
 
-let HTML = fs.readFileSync(`${__dirname}/index.html`);
-
-const names = ["francis", "steve", "rob"];
-const cars = {
-    name: "Ford",
-    model: "Fiesta"
-}
-
-const server = http.createServer((req, res) => {
-    if (req.url === '/') {
-        res.writeHead(200, { 'Content-type': 'text/html' })
-        res.end(HTML)
-    } else if (req.url === '/api/user') {
-        res.writeHead(200, { 'Content-type': 'application/json' })
-        const json = JSON.stringify({
-            name: 'francis',
-            lastname: 'jones'
-        })
-        res.end(json)
-    } else {
-        res.writeHead(404);
-        res.end();
-    }
+app.get('/', (req, res) => {
+    res.send('<html><body><h1 style="background:red">Hello there</h1></body></html>')
 })
 
+app.get('/api/user', (req, res) => {
+    res.send({
+        name: 'francis',
+        lastname: 'jones'
+    });
+})
 
-const port = 8282;
-server.listen(port, '127.0.0.1');
-console.log(`server is running on ${port}`)
+const port = process.env.PORT || 3000;
+app.listen(port);
