@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const bodyParser = require('body-parser');
 
 let HTML = fs.readFileSync(`${__dirname}/index.html`);
 
@@ -11,7 +12,8 @@ app.use('/', (req, res, next) => {
     res.cookie('CookieName', 'cookievalue');
     next();
 });
-
+app.use(bodyParser.json())
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const hello = (req, res, next) => {
     console.log('hello');
     next();
@@ -46,6 +48,32 @@ app.get('/api/car', (req, res) => {
         brand,
         model
     })
+})
+
+
+app.get('/user', (req, res) => {
+    let USER_HTML = fs.readFileSync(`${__dirname}/views/user.html`);
+    res.end(USER_HTML);
+})
+
+app.get('/userquery', (req, res) => {
+    let FORM_HTML = fs.readFileSync(`${__dirname}/views/form.html`);
+    res.end(FORM_HTML);
+})
+
+
+app.post('/api/adduser', (req, res) => {
+    console.log(req.body);
+    res.sendStatus(200)
+})
+
+app.post('/api/queryadd', urlencodedParser, (req, res) => {
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+
+    console.log(firstname)
+    console.log(lastname)
+    res.sendStatus(200)
 })
 
 
